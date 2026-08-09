@@ -1,9 +1,9 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const User = require('./user.model');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+const User = require("./user.model");
 
 const Todo = sequelize.define(
-  'Todo',
+  "Todo",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -24,13 +24,13 @@ const Todo = sequelize.define(
     },
   },
   {
-    tableName: 'todos',
+    tableName: "todos",
     timestamps: true,
-  }
+  },
 );
 
 // relasi: satu user punya banyak todo
-User.hasMany(Todo, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Todo.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Todo, { foreignKey: "user_id", onDelete: "CASCADE" });
+Todo.belongsTo(User, { foreignKey: "user_id" });
 
 module.exports = Todo;

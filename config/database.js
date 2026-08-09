@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { Sequelize } = require('sequelize');
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -8,9 +8,9 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'postgres',
+    dialect: "postgres",
     logging: false, // set true kalo mau liat query SQL di console
-  }
+  },
 );
 
 module.exports = sequelize;
