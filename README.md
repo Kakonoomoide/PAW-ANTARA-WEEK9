@@ -18,6 +18,8 @@ npm install
 npm run dev
 ```
 
+Setelah server berjalan, buka `http://localhost:4000`.
+
 Tabel `users` dan `products` dibuat saat server pertama kali berjalan. Seeder opsional membuat akun dan produk contoh:
 
 ```bash
