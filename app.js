@@ -6,6 +6,7 @@ const { sequelize } = require("./models");
 
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
+const viewRoutes = require("./routes/view.routes");
 
 const app = express();
 
@@ -33,14 +34,7 @@ app.use(
 // routes
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
-
-// redirect root ke /products
-app.get("/", (req, res) => {
-  if (req.session.userId) {
-    return res.redirect("/products");
-  }
-  return res.redirect("/auth/login");
-});
+app.use("/", viewRoutes);
 
 const PORT = process.env.PORT || 3000;
 

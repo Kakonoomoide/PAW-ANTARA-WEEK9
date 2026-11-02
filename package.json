@@ -1,7 +1,7 @@
 {
-  "name": "todo-api",
+  "name": "auth-product-app",
   "version": "1.0.0",
-  "description": "Simple Todo API with Express + Sequelize (PostgreSQL) - MVC structure",
+  "description": "Authentication and product management with Express + Sequelize (PostgreSQL)",
   "main": "app.js",
   "type": "commonjs",
   "scripts": {

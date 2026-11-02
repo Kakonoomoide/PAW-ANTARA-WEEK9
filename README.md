@@ -1,91 +1,51 @@
-# Todo API (Express + Sequelize + PostgreSQL)
+# Aplikasi Manajemen Produk
 
-Struktur MVC simple, auth pake session (bukan JWT), buat login & CRUD todo.
+Aplikasi Express + Sequelize + PostgreSQL untuk autentikasi berbasis session dan CRUD produk. Halaman menggunakan EJS.
 
-## Struktur folder
-```
-todo-api/
-├── app.js                  # entry point
-├── config/
-│   └── database.js         # koneksi sequelize
-├── models/
-│   ├── user.model.js
-│   ├── todo.model.js
-│   └── index.js
-├── controllers/
-│   ├── auth.controller.js
-│   └── todo.controller.js
-├── middlewares/
-│   └── auth.middleware.js  # cek session login
-├── routes/
-│   ├── auth.routes.js
-│   └── todo.routes.js
-├── seeders/
-│   └── seed.js              # data dummy user & todo
-└── utils/
-    └── response.js         # format response konsisten
-```
+## Menjalankan aplikasi
 
-## Cara install & jalanin
+1. Buat database PostgreSQL, misalnya:
 
-1. Bikin database postgres dulu:
 ```sql
-CREATE DATABASE todo_db;
+CREATE DATABASE products_db;
 ```
 
-2. Copy `.env.example` jadi `.env`, terus sesuaikan kredensial DB kamu.
+2. Salin `.env.example` menjadi `.env`, lalu sesuaikan konfigurasi database dan `SESSION_SECRET`.
+3. Install dependency dan jalankan server:
 
-3. Install dependency:
 ```bash
 npm install
-```
-
-4. Jalankan server:
-```bash
 npm run dev
 ```
-Tabel `users` dan `todos` bakal otomatis kebuat pas server pertama kali nyala (lewat `sequelize.sync()`).
 
-## Seeder (data dummy)
+Tabel `users` dan `products` dibuat saat server pertama kali berjalan. Seeder opsional membuat akun dan produk contoh:
 
-Buat isi database dengan data awal (2 user + beberapa todo), tinggal jalanin:
 ```bash
 npm run seed
 ```
-Ini bakal bikin (atau skip kalo udah ada, aman dijalanin berkali-kali):
-- User `rizki` & `budi`, password sama-sama `password123`
-- Beberapa todo dummy punya masing-masing user
 
-Setelah itu langsung bisa login pake salah satu user di atas buat testing endpoint todo.
+Akun contoh: `rizki` atau `budi`, dengan password `password123`.
 
-## Endpoint
+## Route halaman
 
-### Auth
-| Method | Endpoint            | Body                          | Keterangan          |
-|--------|----------------------|--------------------------------|----------------------|
-| POST   | /api/auth/register   | `{ username, password }`      | Daftar user baru     |
-| POST   | /api/auth/login      | `{ username, password }`      | Login, bikin session |
-| POST   | /api/auth/logout     | -                              | Logout               |
+| Method | Route                  | Halaman/aksi                                             |
+| ------ | ---------------------- | -------------------------------------------------------- |
+| GET    | `/`                    | Arahkan ke daftar produk jika sudah login, atau ke login |
+| GET    | `/auth/login`          | Form login                                               |
+| POST   | `/auth/login`          | Proses login                                             |
+| GET    | `/auth/register`       | Form registrasi                                          |
+| POST   | `/auth/register`       | Proses registrasi                                        |
+| POST   | `/auth/logout`         | Logout                                                   |
+| GET    | `/products`            | Daftar produk pengguna                                   |
+| GET    | `/products/create`     | Form tambah produk                                       |
+| POST   | `/products`            | Simpan produk                                            |
+| GET    | `/products/:id/edit`   | Form edit produk                                         |
+| POST   | `/products/:id/update` | Perbarui produk                                          |
+| POST   | `/products/:id/delete` | Hapus produk                                             |
 
-### Todo (wajib login / punya session valid)
-| Method | Endpoint         | Body                          | Keterangan            |
-|--------|-------------------|--------------------------------|-------------------------|
-| GET    | /api/todos        | -                               | List semua todo user   |
-| POST   | /api/todos        | `{ title }`                    | Tambah todo baru       |
-| PUT    | /api/todos/:id    | `{ title?, is_done? }`         | Update todo            |
-| DELETE | /api/todos/:id    | -                               | Hapus todo             |
-
-## Format response
-Semua response pake format seragam:
-```json
-{
-  "code": 200,
-  "success": true,
-  "message": "...",
-  "data": { }
-}
-```
+Semua route produk memerlukan session login yang valid.
 
 ## Catatan
-- Auth pake `express-session`, session id disimpan di cookie `connect.sid`. Kalo test pake Postman/Insomnia, pastiin cookie di-enable biar session kebawa antar-request.
-- Kalo mau deploy production, ganti session store default (in-memory) ke store yang persist, misal `connect-pg-simple` biar session gak ilang tiap restart server.
+
+- Session ID disimpan di cookie `connect.sid`; aktifkan cookie saat menguji lewat Postman atau Insomnia.
+- Untuk production, gunakan session store persisten agar session tidak hilang saat server restart.
