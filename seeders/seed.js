@@ -1,6 +1,6 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const { sequelize, User, Todo } = require("../models");
+const { sequelize, User, Product } = require("../models");
 
 const SALT_ROUNDS = 10;
 
@@ -28,20 +28,55 @@ async function seed() {
 
     console.log("User dummy siap:", user1.username, "&", user2.username);
 
-    // bikin todo dummy, tapi cek dulu biar gak numpuk kalo diulang-ulang
-    const existingTodos = await Todo.count({ where: { user_id: user1.id } });
+    // bikin product dummy, tapi cek dulu biar gak numpuk kalo diulang-ulang
+    const existingProducts = await Product.count({ where: { user_id: user1.id } });
 
-    if (existingTodos === 0) {
-      await Todo.bulkCreate([
-        { title: "Belajar Sequelize", is_done: true, user_id: user1.id },
-        { title: "Bikin API Todo", is_done: true, user_id: user1.id },
-        { title: "Nambahin fitur seeder", is_done: false, user_id: user1.id },
-        { title: "Review PR temen", is_done: false, user_id: user2.id },
-        { title: "Fix bug login", is_done: false, user_id: user2.id },
+    if (existingProducts === 0) {
+      await Product.bulkCreate([
+        {
+          name: "Laptop Gaming Asus ROG",
+          description: "Laptop gaming performa tinggi dengan GPU RTX 4060",
+          price: 18500000,
+          stock: 5,
+          category: "Elektronik",
+          user_id: user1.id,
+        },
+        {
+          name: "Sepatu Nike Air Max",
+          description: "Sepatu lari premium dengan teknologi Air cushion",
+          price: 1250000,
+          stock: 20,
+          category: "Fashion",
+          user_id: user1.id,
+        },
+        {
+          name: "Kopi Arabika Flores",
+          description: "Biji kopi arabika premium dari dataran tinggi Flores",
+          price: 85000,
+          stock: 0,
+          category: "Makanan & Minuman",
+          user_id: user1.id,
+        },
+        {
+          name: "Headphone Sony WH-1000XM5",
+          description: "Headphone noise cancelling terbaik di kelasnya",
+          price: 4200000,
+          stock: 8,
+          category: "Elektronik",
+          user_id: user2.id,
+        },
+        {
+          name: "Tas Ransel Outdoor",
+          description: "Tas ransel tahan air kapasitas 45L untuk hiking",
+          price: 650000,
+          stock: 15,
+          category: "Outdoor",
+          user_id: user2.id,
+        },
       ]);
-      console.log("Todo dummy berhasil ditambahin");
+      console.log("Product dummy berhasil ditambahin");
     } else {
-      console.log("Todo dummy udah ada, skip supaya gak dobel");
+      console.log("Product dummy udah ada, skip supaya gak dobel");
     }
 
     console.log("\nSeeding selesai ✅");

@@ -1,14 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
+const path = require("path");
 const { sequelize } = require("./models");
 
 const authRoutes = require("./routes/auth.routes");
-const todoRoutes = require("./routes/todo.routes");
+const productRoutes = require("./routes/product.routes");
 
 const app = express();
 
+// setup EJS sebagai view engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
@@ -22,11 +30,16 @@ app.use(
   }),
 );
 
-app.use("/api/auth", authRoutes);
-app.use("/api/todos", todoRoutes);
+// routes
+app.use("/auth", authRoutes);
+app.use("/products", productRoutes);
 
+// redirect root ke /products
 app.get("/", (req, res) => {
-  res.json({ message: "Todo API jalan 🚀" });
+  if (req.session.userId) {
+    return res.redirect("/products");
+  }
+  return res.redirect("/auth/login");
 });
 
 const PORT = process.env.PORT || 3000;
