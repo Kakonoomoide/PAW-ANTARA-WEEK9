@@ -18,6 +18,11 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false, // ini bakal nyimpen hash, bukan plain text
     },
+    isdelete: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
   {
     tableName: "users",

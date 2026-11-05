@@ -44,7 +44,7 @@ async function start() {
     console.log("Koneksi database berhasil");
 
     // sync model ke db (bikin tabel kalo belum ada)
-    await sequelize.sync();
+    await sequelize.sync({alter: true}); // tambahkan alter: true agar terupdate untuk data tablenya
     console.log("Sync model selesai");
 
     app.listen(PORT, () => {
